@@ -3,7 +3,7 @@
 
 import Data.Char (ord, isDigit)
 
-inputfile = "input_1.txt"
+inputfile = "..\\..\\input_1.txt"
 
 helperFunc :: Maybe (Char, Char) -> Char -> Maybe (Char, Char)
 helperFunc Nothing c = if isDigit c then Just (c, c) else Nothing
@@ -30,5 +30,5 @@ sumCalibrationValues' input = sum $ map calibrationValue' (lines input)
 main :: IO ()
 main = do
     input <- readFile inputfile
-    putStrLn $ show $ sumCalibrationValues input
-    putStrLn $ show $ sumCalibrationValues' input
+    putStrLn $ "1st star: " ++ (show $ sumCalibrationValues input)
+    putStrLn $ "2nd star: " ++ (show $ sumCalibrationValues' input)

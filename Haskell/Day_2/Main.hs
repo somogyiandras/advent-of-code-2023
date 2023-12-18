@@ -4,7 +4,9 @@
 import Data.Char (ord, isDigit)
 import Text.ParserCombinators.ReadP
 
-inputfile = "input_1.txt"
+inputfile = "input_2.txt"
+criteria = [Red 12, Green 13, Blue 14]
+
 
 data Cube = Red Int | Green Int | Blue Int 
     deriving (Eq, Ord)
@@ -17,12 +19,19 @@ instance Show Cube where
 -- instance Read Cube where
 --    readsPrec _ input =
 
-digit :: ReadP Char
-digit =
+parsSep :: ReadP Char
+parsSep = do
+    skipSpaces
+    sep <- char ',' +++ char ';'
+    skipSpaces
+    return sep
+
+parsDigit :: ReadP Char
+parsDigit =
     satisfy (\char -> char >= '0' && char <= '9')
 
-integer :: ReadP Cube
-integer = do
+parsCube :: ReadP Cube
+parsCube = do
     num <- fmap read $ munch1 isDigit
     optional (char ' ')
     color <- string "red" +++ string "green" +++ string "blue"
@@ -31,44 +40,36 @@ integer = do
         "green" -> return (Green num)
         "blue" -> return (Blue num)
 
+parsHead :: ReadP Int
+parsHead = do
+    string "Game "
+    num <- fmap read $ munch1 isDigit
+    string ": "
+    return num
 
+parsLine :: ReadP (Int, [Cube])
+parsLine = do
+    skipSpaces
+    id <- parsHead
+    listCube <- sepBy parsCube parsSep
+    return (id, listCube)
+    
+-- the fully parsed line fst $ last $ readP_to_S parsLine "line"
+-- but now we need only the line number for which the games are possible
 
--- instance Eq Cube where
---     (==) (Red i) (Red j) = i == j
---     (==) (Green i) (Green j) = i == j
---     (==) (Blue i) (Blue j) = i == j
---     (==) _ _ = False
+parsPossible :: ReadP (Int)
+parsPossible = do
+    skipSpaces
+    id <- option 0 parsHead
+    possible <- sepBy parsCube parsSep
+    return (id)
 
--- instance Ord Cube where
---     (<=) (Red i) (Red j) = i == j
---     (==) (Green i) (Green j) = i == j
---     (==) (Blue i) (Blue j) = i == j
---     (==) _ _ = False
+isPossible :: String -> Int
+isPossible inputLine = fst $ last $ readP_to_S parsPossible inputLine
 
-helperFunc :: Maybe (Char, Char) -> Char -> Maybe (Char, Char)
-helperFunc Nothing c = if isDigit c then Just (c, c) else Nothing
-helperFunc (Just (a, b)) c = if isDigit c then Just (a, c) else Just (a, b)
-
-helperFunc' :: Maybe (Char, Char) -> Char -> Maybe (Char, Char)
-helperFunc' Nothing c = if isDigit c then Just (c, c) else Nothing
-helperFunc' (Just (a, b)) c = if isDigit c then Just (a, c) else Just (a, b)
-
-fromTupletoInt :: Maybe (Char, Char) -> Int
-fromTupletoInt Nothing = 0
-fromTupletoInt (Just (a, b)) = 10 * (ord a - 48) + ord b - 48
-
-calibrationValue :: String -> Int
-calibrationValue inputLine = fromTupletoInt $ foldl helperFunc Nothing inputLine
-
-calibrationValue' :: String -> Int
-calibrationValue' inputLine = fromTupletoInt $ foldl helperFunc' Nothing inputLine
-
-sumCalibrationValues input = sum $ map calibrationValue (lines input)
-
-sumCalibrationValues' input = sum $ map calibrationValue' (lines input)
+sumPossible input = sum $ map isPossible (lines input)
 
 main :: IO ()
 main = do
     input <- readFile inputfile
-    putStrLn $ show $ sumCalibrationValues input
-    putStrLn $ show $ sumCalibrationValues' input
+    putStrLn $ show $ sumPossible input
