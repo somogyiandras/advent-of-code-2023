@@ -2,19 +2,36 @@
 -- main program get input data from inputfile file
 
 import Data.Char (ord, isDigit)
+import Text.ParserCombinators.ReadP
 
 inputfile = "input_1.txt"
 
 data Cube = Red Int | Green Int | Blue Int 
-    deriving (Read, Eq, Ord)
+    deriving (Eq, Ord)
 
 instance Show Cube where
     show (Red i) = show i ++ " red"
     show (Green i) = show i ++ " green"
     show (Blue i) = show i ++ " blue"
     
-instance Read Cube where
-    
+-- instance Read Cube where
+--    readsPrec _ input =
+
+digit :: ReadP Char
+digit =
+    satisfy (\char -> char >= '0' && char <= '9')
+
+integer :: ReadP Cube
+integer = do
+    num <- fmap read $ munch1 isDigit
+    optional (char ' ')
+    color <- string "red" +++ string "green" +++ string "blue"
+    case color of
+        "red" -> return (Red num)
+        "green" -> return (Green num)
+        "blue" -> return (Blue num)
+
+
 
 -- instance Eq Cube where
 --     (==) (Red i) (Red j) = i == j

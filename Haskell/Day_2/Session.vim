@@ -49,8 +49,8 @@ omap <silent> g% <Plug>(MatchitOperationBackward)
 xmap <silent> g% <Plug>(MatchitVisualBackward)
 nmap <silent> g% <Plug>(MatchitNormalBackward)
 nnoremap n nzzzv
-nnoremap <SNR>74_: :=v:count ? v:count : ''
 nnoremap <SNR>69_: :=v:count ? v:count : ''
+nnoremap <SNR>74_: :=v:count ? v:count : ''
 xnoremap <silent> <Plug>NetrwBrowseXVis :call netrw#BrowseXVis()
 nnoremap <silent> <Plug>NetrwBrowseX :call netrw#BrowseX(netrw#GX(),netrw#CheckIfRemote(netrw#GX()))
 nnoremap <silent> <Plug>(dotoo-agenda-filter) :call dotoo#agenda#filter_agendas()
@@ -164,7 +164,7 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +9 Main.hs
+badd +17 Main.hs
 badd +1 input_2.txt
 argglobal
 %argdel
@@ -186,8 +186,8 @@ set winminheight=0
 set winheight=1
 set winminwidth=0
 set winwidth=1
-exe 'vert 1resize ' . ((&columns * 136 + 136) / 273)
-exe 'vert 2resize ' . ((&columns * 136 + 136) / 273)
+exe 'vert 1resize ' . ((&columns * 73 + 73) / 147)
+exe 'vert 2resize ' . ((&columns * 73 + 73) / 147)
 argglobal
 balt input_2.txt
 setlocal keymap=
@@ -261,7 +261,8 @@ setlocal nolinebreak
 setlocal nolisp
 setlocal lispoptions=
 setlocal lispwords=
-setlocal nolist
+set list
+setlocal list
 setlocal listchars=
 setlocal makeencoding=
 setlocal makeprg=
@@ -324,12 +325,14 @@ setlocal nowinfixheight
 setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
-let s:l = 17 - ((16 * winheight(0) + 29) / 59)
+26
+normal! zo
+let s:l = 26 - ((19 * winheight(0) + 17) / 34)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 17
-normal! 04|
+keepjumps 26
+normal! 023|
 wincmd w
 argglobal
 if bufexists(fnamemodify("input_2.txt", ":p")) | buffer input_2.txt | else | edit input_2.txt | endif
@@ -467,15 +470,15 @@ setlocal nowinfixheight
 setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
-let s:l = 3 - ((0 * winheight(0) + 29) / 59)
+let s:l = 3 - ((0 * winheight(0) + 17) / 34)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
 keepjumps 3
 normal! 0
 wincmd w
-exe 'vert 1resize ' . ((&columns * 136 + 136) / 273)
-exe 'vert 2resize ' . ((&columns * 136 + 136) / 273)
+exe 'vert 1resize ' . ((&columns * 73 + 73) / 147)
+exe 'vert 2resize ' . ((&columns * 73 + 73) / 147)
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0
   silent exe 'bwipe ' . s:wipebuf
@@ -490,6 +493,7 @@ if filereadable(s:sx)
   exe "source " . fnameescape(s:sx)
 endif
 let &g:so = s:so_save | let &g:siso = s:siso_save
+nohlsearch
 doautoall SessionLoadPost
 unlet SessionLoad
 " vim: set ft=vim :
