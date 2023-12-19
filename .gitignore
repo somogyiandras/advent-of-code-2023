@@ -1,2 +1,5 @@
 .*.s*
 **/Session.vim
+*.exe
+*.hi
+*.o
