@@ -23,7 +23,7 @@ parsPossibleCube = do
         "red" -> return (Red num)
         "green" -> return (Green num)
         "blue" -> return (Blue num)
-    return ((== Just GT) `any` (compareCube cube `map` criteria))
+    return (not $ (== Just GT) `any` (compareCube cube `map` criteria))
 
 parsPossible :: ReadP (Int, [Bool])
 parsPossible = do
@@ -36,8 +36,10 @@ readPossibleLine :: String -> (Int, [Bool])
 readPossibleLine s = fst $ last $ readP_to_S parsPossible s
 
 isPossible :: String -> Int
-isPossible = undefined
---isPossible inputLine = fst $ last $ readP_to_S parsPossible inputLine
+isPossible inputLine
+    | any (False ==) $ snd result  = 0
+    | otherwise = fst result
+    where result = readPossibleLine inputLine
 
 sumPossible input = sum $ map isPossible (lines input)
 
