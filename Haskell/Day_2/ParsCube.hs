@@ -25,6 +25,17 @@ sameColor (Green _) (Green _) = True
 sameColor (Blue _) (Blue _) = True
 sameColor _ _ = False
 
+cubeToTuple :: Cube -> (String, Int)
+cubeToTuple (Red n) = ("Red", n)
+cubeToTuple (Green n) = ("Green", n)
+cubeToTuple (Blue n) = ("Blue", n)
+
+tupleToCube :: (String, Int) -> Cube
+tupleToCube (("Red", n)) = Red n
+tupleToCube (("Green", n)) = Green n
+tupleToCube (("Blue", n)) = Blue n
+
+
 parsSep :: ReadP Char
 parsSep = do
     skipSpaces
