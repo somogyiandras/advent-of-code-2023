@@ -19,10 +19,16 @@ instance Show Cube where
 instance Read Cube where
     readsPrec _ = readP_to_S parsCube
 
+sameColor :: Cube -> Cube -> Bool
+sameColor (Red _) (Red _) = True
+sameColor (Green _) (Green _) = True
+sameColor (Blue _) (Blue _) = True
+sameColor _ _ = False
+
 parsSep :: ReadP Char
 parsSep = do
     skipSpaces
-    sep <- char ',' +++ char ';'
+    sep <- char ',' <++ char ';'
     skipSpaces
     return sep
 

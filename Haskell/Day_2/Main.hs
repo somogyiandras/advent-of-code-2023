@@ -2,6 +2,7 @@
 -- main program get input data from inputfile file
 
 import Data.Char (isDigit)
+import Data.List (groupBy)
 import ParsCube
 import Text.ParserCombinators.ReadP
 
@@ -41,9 +42,15 @@ isPossible inputLine
     | otherwise = fst result
     where result = readPossibleLine inputLine
 
+--power :: String -> Int
+--power inputLine = groupBy () $ snd $ readLine inputLine
+
 sumPossible input = sum $ map isPossible (lines input)
+
+--sumPower input = sum $ map power (lines input)
 
 main :: IO ()
 main = do
     input <- readFile inputfile
     putStrLn $ show $ sumPossible input
+--    putStrLn $ show $ sumPower input
