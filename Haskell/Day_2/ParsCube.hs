@@ -68,4 +68,5 @@ parsLine = do
     return (id, listCube)
     
 readLine :: String -> (Int, [Cube])
-readLine s = fst $ last $ readP_to_S parsLine s
+-- readLine s = fst $ last $ readP_to_S parsLine s
+readLine = fst . last . readP_to_S parsLine

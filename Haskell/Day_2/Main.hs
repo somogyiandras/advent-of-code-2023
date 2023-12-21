@@ -34,7 +34,8 @@ parsPossible = do
     return (id, possible)
 
 readPossibleLine :: String -> (Int, [Bool])
-readPossibleLine s = fst $ last $ readP_to_S parsPossible s
+-- readPossibleLine s = fst $ last $ readP_to_S parsPossible s
+readPossibleLine = fst . last . readP_to_S parsPossible
 
 isPossible :: String -> Int
 isPossible inputLine
@@ -55,7 +56,7 @@ parsPower = do
     return (id, tupleset)
 
 readPower :: String -> [Cube]
-readPower s = snd $ fst $ last $ readP_to_S parsPower s
+readPower = snd . fst . last . readP_to_S parsPower
 
 powerOfLine :: String -> Int
 powerOfLine inputLine = product $ map (snd . cubeToTuple) $ readPower inputLine
