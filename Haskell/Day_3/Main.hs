@@ -4,8 +4,6 @@ import Schema
 
 inputfile = "input_3.txt"
 
-
-
 -- 1st star
 
 
@@ -14,5 +12,7 @@ inputfile = "input_3.txt"
 main :: IO ()
 main = do
     input <- readFile inputfile
-    putStrLn $ "Result for 1st star: " ++ show (input)
-    putStrLn $ "Result for 2nd star: " ++ show (input)
+    putStrLn $ "Result for 1st star: "
+    let engine = readSchema (Size 140 140) input
+    putStrLn $ show (engine)
+--    putStrLn $ "Result for 2nd star: " ++ show (input)
