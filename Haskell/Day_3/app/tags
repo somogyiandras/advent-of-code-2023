@@ -1,0 +1,91 @@
+!_TAG_FILE_FORMAT	2	//
+!_TAG_FILE_SORTED	1	//
+!_TAG_FILE_ENCODING	utf-8	//
+!_TAG_PROGRAM_NAME	ghc-tags	//
+!_TAG_PROGRAM_URL	https://hackage.haskell.org/package/ghc-tags	//
+!_TAG_PROGRAM_VERSION	1.8	//
+!_TAG_FIELD_DESCRIPTION!Haskell	type	/type of expression/
+!_TAG_FIELD_DESCRIPTION!Haskell	ffi	/foreign object name/
+!_TAG_FIELD_DESCRIPTION!Haskell	file	/not exported term/
+!_TAG_FIELD_DESCRIPTION!Haskell	instance	/class, type or data type instance/
+!_TAG_FIELD_DESCRIPTION!Haskell	Kind	/kind of a type/
+!_TAG_KIND_DESCRIPTION!Haskell	M	/module/
+!_TAG_KIND_DESCRIPTION!Haskell	f	/function/
+!_TAG_KIND_DESCRIPTION!Haskell	A	/type constructor/
+!_TAG_KIND_DESCRIPTION!Haskell	c	/data constructor/
+!_TAG_KIND_DESCRIPTION!Haskell	g	/gadt constructor/
+!_TAG_KIND_DESCRIPTION!Haskell	r	/record field/
+!_TAG_KIND_DESCRIPTION!Haskell	=	/type synonym/
+!_TAG_KIND_DESCRIPTION!Haskell	:	/type signature/
+!_TAG_KIND_DESCRIPTION!Haskell	p	/pattern synonym/
+!_TAG_KIND_DESCRIPTION!Haskell	C	/type class/
+!_TAG_KIND_DESCRIPTION!Haskell	m	/type class member/
+!_TAG_KIND_DESCRIPTION!Haskell	i	/type class instance/
+!_TAG_KIND_DESCRIPTION!Haskell	T	/type family/
+!_TAG_KIND_DESCRIPTION!Haskell	t	/type family instance/
+!_TAG_KIND_DESCRIPTION!Haskell	D	/data type family/
+!_TAG_KIND_DESCRIPTION!Haskell	d	/data type family instance/
+!_TAG_KIND_DESCRIPTION!Haskell	I	/foreign import/
+!_TAG_KIND_DESCRIPTION!Haskell	E	/foreign export/
+==	Schema.hs	43;"	f
+Cell	Schema.hs	39;"	c	term:Cell (Int, Int) Char
+Coord	Schema.hs	34;"	=	type:(Int, Int)
+Eq	Schema.hs	42;"	i	instance:Eq Cell
+Main	Main.hs	1;"	M
+Ord	Schema.hs	45;"	i	instance:Ord Cell
+Schema	Schema.hs	1;"	M
+Schema	Schema.hs	82;"	c	term:Schema {size :: Size, cells :: [Cell]}
+Show	Schema.hs	87;"	i	instance:Show Schema
+Size	Schema.hs	36;"	c	term:Size Int Int
+adjCells	Schema.hs	74;"	f
+build	Schema.hs	8;"	f
+cellValue	Schema.hs	53;"	f
+cells	Schema.hs	84;"	r
+chunksOf	Schema.hs	11;"	f
+compare	Schema.hs	46;"	f
+coords	Main.hs	27;"	f
+coords	Main.hs	32;"	f
+coords	Schema.hs	70;"	f
+eraseSymbols	Main.hs	37;"	f
+findNonAdjDigits	Schema.hs	128;"	f
+getAdjacentCells_to_Cell	Main.hs	31;"	f
+getAdjacentCells_to_Cells	Main.hs	26;"	f
+getAdjacentCoords_to_Cells	Main.hs	22;"	f
+getCell	Schema.hs	106;"	f
+getCellChar	Schema.hs	101;"	f
+getCells	Schema.hs	111;"	f
+hCell_to_Coord	Schema.hs	77;"	f
+hCells_to_Coords	Schema.hs	80;"	f
+initCells	Schema.hs	66;"	f
+initSchema	Schema.hs	91;"	f
+inputfile	Main.hs	8;"	f
+isValidRead	Schema.hs	26;"	f
+loadEngine	Main.hs	12;"	f
+main	Main.hs	51;"	f
+mapCells	Schema.hs	118;"	f
+newcells	Main.hs	38;"	f
+newcells	Schema.hs	115;"	f
+parseCells	Schema.hs	63;"	f
+puzzle	Schema.hs	140;"	f
+readCells	Schema.hs	69;"	f
+readSchema	Schema.hs	96;"	f
+scCellsCoords	Schema.hs	119;"	f
+searchSymbols	Main.hs	16;"	f
+selected	Main.hs	23;"	f
+selected	Main.hs	28;"	f
+selected	Main.hs	33;"	f
+setCell	Schema.hs	114;"	f
+shift	Schema.hs	23;"	f
+show	Schema.hs	88;"	f
+showCells	Schema.hs	56;"	f
+showCells'	Schema.hs	59;"	f
+size	Schema.hs	83;"	r
+splitter	Schema.hs	14;"	f
+ss	Main.hs	39;"	f
+ss	Schema.hs	71;"	f
+test_2	Main.hs	76;"	f
+translate	Schema.hs	29;"	f
+translateInv	Schema.hs	32;"	f
+translated	Schema.hs	120;"	f
+validRead	Schema.hs	18;"	f
+validSymbol	Schema.hs	20;"	f

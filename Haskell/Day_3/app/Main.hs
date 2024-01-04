@@ -4,26 +4,28 @@ import Schema
 import Data.List (nubBy, sort)
 import Data.Char (isDigit)
 
+inputfile :: String
 inputfile = "input_3.txt"
 
 -- 1st star: load the input file into the schematic
 loadEngine :: Size -> String -> Schema
-loadEngine size input = readSchema size input
+loadEngine nm input = readSchema nm input
 
 -- Find all non-digit values in the schema
 searchSymbols :: Schema -> [Char] -> [Cell]
 searchSymbols sc valid = filter (\cell ->  (cellValue cell) `elem` valid) $ cells sc
 
 -- and get  the adjacent digits, precisely the coordinates of the digits
--- ToDo: remove this function and use the AdjacentCell_to_Cell instead
-getAdjacentCoords_to_Cells :: Schema -> [Cell] -> [Coord]
-getAdjacentCoords_to_Cells sc cells = nubBy (\(i,j) (x,y) -> i==x && j==y) $ concat $ map adjCells selected where
-    selected = map (\((i,j),c) -> (i,j)) $ hCells_to_Coords cells
+-- ToDo: remove this function and use the AdjacentCell_to_Cell instead, or use only the coords
+-- using the cells (with values) is more general, but maybe unnessesary
+getAdjacentCoords_to_Cells :: [Cell] -> [Coord]
+getAdjacentCoords_to_Cells coords = nubBy (\(i,j) (x,y) -> i==x && j==y) $ concat $ map adjCells selected where
+    selected = map (\((i,j),_) -> (i,j)) $ hCells_to_Coords coords
 
 getAdjacentCells_to_Cells :: Schema -> [Cell] -> [Cell]
-getAdjacentCells_to_Cells sc cells = getCells sc coords where
+getAdjacentCells_to_Cells sc ces = getCells sc coords where
     coords = nubBy (\(i,j) (x,y) -> i==x && j==y) $ concat $ map adjCells selected
-    selected = map (\((i,j),c) -> (i,j)) $ hCells_to_Coords cells
+    selected = map (\((i,j),_) -> (i,j)) $ hCells_to_Coords ces
 
 getAdjacentCells_to_Cell :: Schema -> Cell -> [Cell]
 getAdjacentCells_to_Cell sc cell = getCells sc coords where
@@ -51,13 +53,13 @@ main = do
 --    putStrLn $ "Result for 1st star: "
 --    let engine = loadEngine (Size 140 140) input
 --    let symbols = searchSymbols engine validSymbol
---    let adjacent = getAdjacentCoords_to_Cells engine symbols
+--    let adjacent = getAdjacentCoords_to_Cells symbols
 --    let marked = mapCells engine adjacent translate -- and mark the digits adjacent the symbols (0 -> A, ...)
 --    let erased = eraseSymbols marked
 -- | and parse the remaining cells as integers, but translate back the marked digits
 --    let parsedLS = filter (not . all (==True) . map isDigit) $ parseCells (cells erased)
 --    let resultLS = map (map (\c -> if isDigit c then c else translateInv c)) $ parsedLS
---    let resultInt = map read resultLS
+--    let resultInt = map read resultLS :: [Int]
 --    putStrLn $ show $ sum resultInt
 
     putStrLn $ "Result for 2nd star: "
@@ -70,7 +72,7 @@ main = do
     putStrLn $ show $ findNonAdjDigits 0 <$> showCells <$> adjacentCe
     putStrLn "end program"
 
-
+test_2 :: String
 test_2 = "\
 \467..114..\
 \...*......\

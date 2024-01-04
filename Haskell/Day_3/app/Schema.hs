@@ -2,22 +2,14 @@ module Schema where
 
 import Data.List -- (unfoldr, sort, intercalate, uncons, find)
 import Data.Char
-import Debug.Trace
+import Data.List.Split (chunksOf)
 
--- | chunksOf from Data.List.Split
-build :: ((a -> [a] -> [a]) -> [a] -> [a]) -> [a]
-build g = g (:) []
-
-chunksOf :: Int -> [e] -> [[e]]
-chunksOf i ls = map (take i) (build (splitter ls))
- where
-  splitter :: [e] -> ([e] -> a -> a) -> a -> a
-  splitter [] _ n = n
-  splitter l c n = l `c` splitter (drop i l) c n
-
+validRead :: String
 validRead = "#%&*+-./=@$0123456789ABCDEFGHIJ"
+validSymbol :: String
 validSymbol = "#%&*+-/=@$"
 
+shift :: Int
 shift = ord 'A' - ord '0'
 
 isValidRead :: Char -> Bool
@@ -45,6 +37,7 @@ instance Ord Cell where
       | i1 == i2 = j1 `compare` j2
       | i1 < i2 = LT
       | i1 > i2 = GT
+    compare _ _ = LT
 
 cellValue :: Cell -> Char
 cellValue (Cell (_, _) c) = c
@@ -73,6 +66,8 @@ adjCells (i, j) = [ (x, y) | x <- [i-1 .. i+1], y <- [j-1 .. j+1], (x, y) /= (i,
 hCell_to_Coord :: Cell -> (Coord, Char)
 hCell_to_Coord (Cell (i,j) c) = ((i,j),c)
 
+-- todo: the name is missleading, the result is not the coords of cells, but the cell coords and values
+-- need to reinvent the whole, let cells are a record, so we can extract its fields
 hCells_to_Coords :: [Cell] -> [(Coord, Char)]
 hCells_to_Coords = map hCell_to_Coord
 
@@ -82,7 +77,7 @@ data Schema = Schema {
     }
 
 instance Show Schema where
-    show Schema { size = Size height width, cells = cs } = intercalate "\n" $ chunksOf width $ showCells cs
+    show Schema { size = Size _ width, cells = cs } = intercalate "\n" $ chunksOf width $ showCells cs
 
 initSchema :: Size -> Schema
 initSchema (Size m n) =
@@ -113,13 +108,13 @@ setCell sc (i, j) c = Schema (size sc) (newcells) where
 
 mapCells :: Schema -> [Coord] -> (Char -> Char) -> Schema
 mapCells sc coords tr = foldl (\sc' ((a,b), c) -> setCell sc' (a,b) c) sc translated  where
-    cells = hCells_to_Coords $ getCells sc coords
+    scCellsCoords = hCells_to_Coords $ getCells sc coords
     translated = map (\((i, j), c) ->
        if isDigit c
           then ((i, j) , tr c)
           else ((i, j) , c)
       )
-      cells
+      scCellsCoords
 
 findNonAdjDigits :: Int -> String -> Int
 findNonAdjDigits n [] = n
@@ -133,10 +128,8 @@ findNonAdjDigits n (c:[]) = if isDigit c
                               else findNonAdjDigits n []
 
 -- | test data
+puzzle :: Schema
 puzzle = Schema { size = Size 3 3,
     cells = [Cell (1,1) '1', Cell (1,2) '*', Cell (1, 3) '$',
              Cell (2,1) '2', Cell (2,2) '*', Cell (2, 3) 'E',
              Cell (3,1) 'A', Cell (3,2) '*', Cell (3, 3) 'F'] }
-
-sc =  (Size 140 140)
-
