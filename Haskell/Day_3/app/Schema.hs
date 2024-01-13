@@ -71,6 +71,9 @@ hCell_to_Coord (Cell (i,j) c) = ((i,j),c)
 hCells_to_Coords :: [Cell] -> [(Coord, Char)]
 hCells_to_Coords = map hCell_to_Coord
 
+----------------------------------------------
+-- declararions, functions of Schema
+
 data Schema = Schema {
     size :: Size,     
     cells :: [Cell]
@@ -102,9 +105,23 @@ getCell sc (i, j) = case find (== Cell (i, j) ' ') $ cells sc of
 getCells :: Schema -> [Coord] -> [Cell]
 getCells sc coords = filter (/= Cell (0, 0) ' ') $ map (getCell sc) coords
 
+getRow :: Schema -> Int -> [Cell]
+getRow sc@(Schema (Size m n) _) rowindex = getCells sc [(rowindex, j) | j <- [1 .. n] ]
+
 setCell :: Schema -> Coord -> Char -> Schema
 setCell sc (i, j) c = Schema (size sc) (newcells) where
     newcells = Cell (i, j) c : delete (Cell (i, j) ' ') (cells sc)
+
+getIntAtCell :: Schema -> Cell -> Maybe Int
+getIntAtCell sc (Cell (m, n) c)
+  | not $ isDigit c = Nothing
+  | otherwise = Just $ read $ whole_int :: Maybe Int
+    where
+        whole_int :: String
+        whole_int = first ++ second
+        first = reverse $ takeWhile isDigit $ reverse $ fst split
+        second = takeWhile isDigit $ snd split
+        split = splitAt n $ showCells $ getRow sc m
 
 mapCells :: Schema -> [Coord] -> (Char -> Char) -> Schema
 mapCells sc coords tr = foldl (\sc' ((a,b), c) -> setCell sc' (a,b) c) sc translated  where
