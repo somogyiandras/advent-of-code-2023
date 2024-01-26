@@ -3,6 +3,7 @@ module Main where
 
 import Data.List
 import Data.Ord
+import qualified Data.Map.Strict as M
 
 inputfile :: String
 inputfile = "input_4.txt"
@@ -57,8 +58,7 @@ data Game =
    MkGame {
      draw_      :: Int
    , pile_      :: [Card]
-   , my_pile_   :: [Card]
-   , last_draw  :: Bool
+   , my_pile_   :: M.Map Card Int
     }
 
 instance Show Game where
@@ -69,19 +69,24 @@ makeDraw game =
     MkGame {
         draw_     = d0 + 1
       , pile_     = p0
-      , my_pile_  = copy_prizes (next_card_id) (cardPoint' next_card)
-      , last_draw = next_card_id == 0
+      , my_pile_  = add_prizes next_card_n $ cardPoint' next_card
     }
         where
             d0 = draw_ game
-            p0 = pile_ game
+            p0 = drop 1 $ pile_ game
             m0 = my_pile_ game
 
-            next_card     = maybe cempty id $ m0!?d0
-            next_card_id  = card_id next_card
+            (next_card, next_card_n) = maybe (cempty, 0) id $ (M.assocs m0)!?d0
 
-            copy_prizes :: Int -> Int -> [Card] -- copyPrizes game i n copy n cards from the ith position of p pile into our pile
-            copy_prizes i n = sort ((take n $ drop i $ p0) ++ m0)
+            add_prizes :: Int -> Int -> M.Map Card Int -- add_prizes l n: add the first n cards from pile to my_pile l times
+            add_prizes l n = add_cards (take n $ p0) l m0
+               where
+                   add_card :: Card -> Int -> M.Map Card Int -> M.Map Card Int
+                   add_card c times mp = M.insertWith (+) c times mp
+
+                   add_cards :: [Card] -> Int -> M.Map Card Int -> M.Map Card Int
+                   add_cards cs times mp = foldl' (\pile c -> add_card c times pile) mp cs
+                    
 
 main :: IO ()
 main = do
@@ -92,16 +97,29 @@ main = do
     putStrLn $ show $ sum $ cardPoint <$> cardRead <$> lines input
 
     putStr "Test_2 result: "
-    let pile = cardRead <$> lines test_1
-        game0 = MkGame 0 pile pile False
-        last_game = until (\g -> last_draw g) makeDraw game0
-     in putStrLn $ show $ length $ my_pile_ last_game
+    let pile    = cardRead <$> lines test_1
+        myPile0 = M.fromList $ zip pile $ replicate (length pile) 1
+        game0 = MkGame 0 pile myPile0
+        last_game = until (\g -> null $ pile_ g) makeDraw game0
+        len :: M.Map Card Int -> Int
+        len p = M.foldl' (\acc card -> acc + card) 0 p
+        in putStrLn $ show $ len $ my_pile_ last_game
+     -- in putStrLn $ show $ take 30 $ iterate makeDraw game0
+
 
     putStr "Result of Day 4 star 2: "
-    let pile = cardRead <$> lines input
-        game0 = MkGame 0 pile pile False
-        last_game = until (\g -> last_draw g) makeDraw game0
-     in putStrLn $ show $ length $ my_pile_ last_game
+    let pile    = cardRead <$> lines input
+        myPile0 = M.fromList $ zip pile $ replicate (length pile) 1
+        game0 = MkGame 0 pile myPile0
+        last_game = until (\g -> null $ pile_ g) makeDraw game0
+        len :: M.Map Card Int -> Int
+        len p = M.foldl' (\acc card -> acc + card) 0 p
+        in putStrLn $ show $ len $ my_pile_ last_game
+--     let pile = cardRead <$> lines input
+--         myPile0 = M.fromList $ zip pile $ replicate (length pile) 1
+--         game0 = MkGame 0 pile myPile0 False
+--         last_game = until (\g -> last_draw g) makeDraw game0
+--      in putStrLn $ show $ length $ my_pile_ last_game
 
 ---------------------------------
 -- test data
